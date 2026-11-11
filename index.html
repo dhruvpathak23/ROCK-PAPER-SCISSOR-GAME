@@ -3,44 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STONE PAPER SCISSOR </title>
-    <link rel = 'stylesheet' href = "sPS.css">
+    <title>STONE PAPER SCISSOR // TACTICAL COMBAT SIMULATOR</title>
+    <!-- Google Fonts matching The Batman Portfolio & Tic-Tac-Toe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sPS.css">
 </head>
 <body>
-<h1>STONE PAPER SCISSOR</h1>
 
-<div class = "choices"> 
-    <div class = "choice" id = "paper">
-        <img src = "image/paper.png" alt="Paper">
-       
-        
-    </div>
-    <div class = "choice" id = "scissors">
-        <img src = "image/scissor.png" alt="Scissor">
-    </div>
-    <div class = "choice" id = "rock">
-        <img src ="image/rock.png" alt="Rock">
-    </div>
-</div>
+    <!-- Subtle CRT Scanline Overlay -->
+    <div class="scanlines"></div>
 
-<div class = "score-board">
-    <div class = "score">
-        <p id = "user-score">0</p>
-        <p>You</p>
-    </div>
-     <div class = "score">
-        <p id = "AI-score">0</p>
-        <p>AI</p>
-    </div>
-</div>
- <div class = "msg-container">
-    <p id = "msg">Play the game</p>
- </div>
+    <main class="sim-wrapper">
+        <!-- Top System Header & Audio Toggle -->
+        <header class="sim-header">
+            <div class="sim-top-bar">
+                <span class="sys-tag">// WAYNE TECH COMBAT MODULE #02</span>
+                <button id="sound-toggle" class="sound-btn" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-up" id="sound-icon"></i>
+                    <span id="sound-label">SFX: ON</span>
+                </button>
+            </div>
+            <h1>STONE PAPER SCISSOR</h1>
+            <p class="sub-directive">SELECT TACTICAL WEAPON OR PRESS [R] [P] [S]</p>
+        </header>
 
+        <!-- Live Scoreboard & Telemetry HUD -->
+        <section class="score-board">
+            <div class="score-card player-card" id="user-card">
+                <span class="score-label">OPERATIVE (YOU)</span>
+                <p id="user-score" class="score-num">0</p>
+            </div>
 
+            <div class="center-telemetry">
+                <div class="streak-box">
+                    <span class="telemetry-label">WIN STREAK</span>
+                    <span id="streak-count" class="streak-num">0 <i class="fas fa-fire"></i></span>
+                </div>
+                <div class="draws-readout">
+                    DRAWS: <strong id="draw-score">0</strong>
+                </div>
+            </div>
 
+            <div class="score-card ai-card" id="ai-card">
+                <span class="score-label">BATCOMPUTER AI</span>
+                <p id="AI-score" class="score-num">0</p>
+            </div>
+        </section>
 
-    <script src = "sPS.js"></script>
+        <!-- Head-to-Head Clash Arena -->
+        <section class="clash-arena">
+            <div class="fighter-slot" id="user-slot">
+                <span class="slot-tag">YOUR DEPLOYMENT</span>
+                <div class="slot-icon" id="user-picked-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="slot-name" id="user-picked-name">STANDBY</span>
+            </div>
+
+            <div class="vs-divider">
+                <span>VS</span>
+            </div>
+
+            <div class="fighter-slot" id="ai-slot">
+                <span class="slot-tag">AI COUNTER</span>
+                <div class="slot-icon" id="ai-picked-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <span class="slot-name" id="ai-picked-name">STANDBY</span>
+            </div>
+        </section>
+
+        <!-- Tactical Weapon Choices -->
+        <section class="choices">
+            <div class="choice" id="rock" title="Deploy Stone [Key: R]">
+                <div class="choice-frame">
+                    <img src="image/rock.png" alt="Rock" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-New-rock fa-hand-back-fist"></i></div>
+                </div>
+                <span class="weapon-name">STONE</span>
+                <span class="key-hint">[R]</span>
+            </div>
+
+            <div class="choice" id="paper" title="Deploy Paper [Key: P]">
+                <div class="choice-frame">
+                    <img src="image/paper.png" alt="Paper" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-paper"></i></div>
+                </div>
+                <span class="weapon-name">PAPER</span>
+                <span class="key-hint">[P]</span>
+            </div>
+
+            <div class="choice" id="scissors" title="Deploy Scissors [Key: S]">
+                <div class="choice-frame">
+                    <img src="image/scissor.png" alt="Scissor" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-scissors"></i></div>
+                </div>
+                <span class="weapon-name">SCISSORS</span>
+                <span class="key-hint">[S]</span>
+            </div>
+        </section>
+
+        <!-- Status Message Banner -->
+        <div class="msg-container">
+            <p id="msg" class="status-neutral">AWAITING TACTICAL INPUT // DEPLOY WEAPON</p>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="controls">
+            <button id="reset-btn" class="btn danger">
+                <i class="fas fa-sync-alt"></i> Reset Combat Logs
+            </button>
+        </div>
+    </main>
+
+    <script src="sPS.js"></script>
 </body>
-
-</html>  
+</html>
