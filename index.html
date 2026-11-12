@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STONE PAPER SCISSOR // TACTICAL COMBAT SIMULATOR</title>
-    <!-- Google Fonts matching The Batman Portfolio & Tic-Tac-Toe -->
+    <title>STONE PAPER SCISSOR // MARKOV AI COMBAT SIMULATOR</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -16,30 +16,66 @@
     <!-- Subtle CRT Scanline Overlay -->
     <div class="scanlines"></div>
 
+    <!-- Boss Battle Match Over Modal -->
+    <div class="modal-overlay hide" id="match-modal">
+        <div class="modal-card">
+            <span class="modal-stamp" id="modal-stamp">// COMBAT SIMULATION CONCLUDED</span>
+            <h2 id="modal-title">ARMOR DEPLETED</h2>
+            <p id="modal-sub">Tactical match complete.</p>
+            <button id="next-bout-btn" class="btn primary"><i class="fas fa-redo"></i> Deploy Next Bout [SPACE]</button>
+        </div>
+    </div>
+
     <main class="sim-wrapper">
         <!-- Top System Header & Audio Toggle -->
         <header class="sim-header">
             <div class="sim-top-bar">
-                <span class="sys-tag">// WAYNE TECH COMBAT MODULE #02</span>
+                <span class="sys-tag">// WAYNE TECH MARKOV AI MODULE #02</span>
                 <button id="sound-toggle" class="sound-btn" aria-label="Toggle Sound">
                     <i class="fas fa-volume-up" id="sound-icon"></i>
                     <span id="sound-label">SFX: ON</span>
                 </button>
             </div>
             <h1>STONE PAPER SCISSOR</h1>
-            <p class="sub-directive">SELECT TACTICAL WEAPON OR PRESS [R] [P] [S]</p>
+
+            <!-- Tactical Control Matrix: AI Engine & Weapon Loadout -->
+            <div class="config-matrix">
+                <div class="mode-selector">
+                    <button id="ai-markov" class="mode-btn active" title="Pattern-Learning Markov Chain Transition Matrix AI">
+                        <i class="fas fa-brain"></i> MARKOV AI (LEARNS YOU)
+                    </button>
+                    <button id="ai-random" class="mode-btn" title="Standard Random RNG Opponent">
+                        <i class="fas fa-dice"></i> RANDOM RNG
+                    </button>
+                </div>
+
+                <div class="mode-selector">
+                    <button id="mode-classic" class="mode-btn active" title="Standard 3 Weapons: Stone, Paper, Scissors">
+                        CLASSIC (3)
+                    </button>
+                    <button id="mode-tactical5" class="mode-btn" title="5-Weapon Directed Graph: Adds Batarang & EMP">
+                        <i class="fas fa-crosshairs"></i> TACTICAL-5
+                    </button>
+                </div>
+            </div>
         </header>
 
-        <!-- Live Scoreboard & Telemetry HUD -->
+        <!-- Live Scoreboard, Armor HP Bars & Telemetry HUD -->
         <section class="score-board">
             <div class="score-card player-card" id="user-card">
-                <span class="score-label">OPERATIVE (YOU)</span>
+                <div class="card-top-row">
+                    <span class="score-label">OPERATIVE (YOU)</span>
+                    <span class="hp-text" id="user-hp-text">100% HP</span>
+                </div>
+                <div class="hp-track">
+                    <div class="hp-fill user-hp" id="user-hp-bar" style="width: 100%;"></div>
+                </div>
                 <p id="user-score" class="score-num">0</p>
             </div>
 
             <div class="center-telemetry">
                 <div class="streak-box">
-                    <span class="telemetry-label">WIN STREAK</span>
+                    <span class="telemetry-label">STREAK // BEST: <strong id="best-streak">0</strong></span>
                     <span id="streak-count" class="streak-num">0 <i class="fas fa-fire"></i></span>
                 </div>
                 <div class="draws-readout">
@@ -48,8 +84,27 @@
             </div>
 
             <div class="score-card ai-card" id="ai-card">
-                <span class="score-label">BATCOMPUTER AI</span>
+                <div class="card-top-row">
+                    <span class="score-label" id="ai-label">MARKOV AI</span>
+                    <span class="hp-text" id="ai-hp-text">100% HP</span>
+                </div>
+                <div class="hp-track">
+                    <div class="hp-fill ai-hp" id="ai-hp-bar" style="width: 100%;"></div>
+                </div>
                 <p id="AI-score" class="score-num">0</p>
+            </div>
+        </section>
+
+        <!-- Live Markov Chain Probability Telemetry Bar -->
+        <section class="markov-telemetry" id="markov-panel">
+            <div class="markov-header">
+                <span><i class="fas fa-microchip"></i> MARKOV CHAIN NEXT-MOVE PREDICTION MATRIX</span>
+                <span id="ai-readout-tag">LEARNING PATTERNS...</span>
+            </div>
+            <div class="prob-bar" id="prob-bar">
+                <div class="prob-seg seg-rock" id="prob-rock" style="width: 33.3%;">STONE 33%</div>
+                <div class="prob-seg seg-paper" id="prob-paper" style="width: 33.3%;">PAPER 33%</div>
+                <div class="prob-seg seg-scissors" id="prob-scissors" style="width: 33.4%;">SCISSORS 33%</div>
             </div>
         </section>
 
@@ -64,7 +119,7 @@
             </div>
 
             <div class="vs-divider">
-                <span>VS</span>
+                <span id="dmg-badge" class="dmg-badge">VS</span>
             </div>
 
             <div class="fighter-slot" id="ai-slot">
@@ -76,18 +131,18 @@
             </div>
         </section>
 
-        <!-- Tactical Weapon Choices -->
-        <section class="choices">
-            <div class="choice" id="rock" title="Deploy Stone [Key: R]">
+        <!-- Tactical Weapon Choices (3 Classic + 2 Tactical-5 Expansion) -->
+        <section class="choices" id="choices-grid">
+            <div class="choice" id="rock" title="Crushes Scissors & Batarang [Key: R]">
                 <div class="choice-frame">
                     <img src="image/rock.png" alt="Rock" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-New-rock fa-hand-back-fist"></i></div>
+                    <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-rock"></i></div>
                 </div>
                 <span class="weapon-name">STONE</span>
                 <span class="key-hint">[R]</span>
             </div>
 
-            <div class="choice" id="paper" title="Deploy Paper [Key: P]">
+            <div class="choice" id="paper" title="Covers Stone & Disables EMP [Key: P]">
                 <div class="choice-frame">
                     <img src="image/paper.png" alt="Paper" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-paper"></i></div>
@@ -96,7 +151,7 @@
                 <span class="key-hint">[P]</span>
             </div>
 
-            <div class="choice" id="scissors" title="Deploy Scissors [Key: S]">
+            <div class="choice" id="scissors" title="Cuts Paper & Deflects Batarang [Key: S]">
                 <div class="choice-frame">
                     <img src="image/scissor.png" alt="Scissor" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="fallback-icon" style="display:none;"><i class="fas fa-hand-scissors"></i></div>
@@ -104,17 +159,45 @@
                 <span class="weapon-name">SCISSORS</span>
                 <span class="key-hint">[S]</span>
             </div>
+
+            <!-- Tactical-5 Expansion Weapons (Hidden in Classic 3 Mode) -->
+            <div class="choice expansion-weapon hide" id="batarang" title="Slices Paper & Short-Circuits EMP [Key: B]">
+                <div class="choice-frame">
+                    <div class="fallback-icon" style="display:flex;"><i class="fas fa-crosshairs"></i></div>
+                </div>
+                <span class="weapon-name">BATARANG</span>
+                <span class="key-hint">[B]</span>
+            </div>
+
+            <div class="choice expansion-weapon hide" id="emp" title="Shatters Stone & Melts Scissors [Key: E]">
+                <div class="choice-frame">
+                    <div class="fallback-icon" style="display:flex;"><i class="fas fa-bolt"></i></div>
+                </div>
+                <span class="weapon-name">EMP PULSE</span>
+                <span class="key-hint">[E]</span>
+            </div>
         </section>
 
         <!-- Status Message Banner -->
         <div class="msg-container">
-            <p id="msg" class="status-neutral">AWAITING TACTICAL INPUT // DEPLOY WEAPON</p>
+            <p id="msg" class="status-neutral">AWAITING TACTICAL INPUT // KEYS [R] [P] [S]</p>
         </div>
+
+        <!-- Live Combat Telemetry Log (Last 4 Rounds) -->
+        <section class="combat-log-box">
+            <span class="log-header">// RECENT COMBAT TELEMETRY LOG</span>
+            <ul id="combat-log-list" class="combat-log-list">
+                <li>SYS_READY // Markov Transition Matrix initialized at uniform prior.</li>
+            </ul>
+        </section>
 
         <!-- Bottom Controls -->
         <div class="controls">
+            <button id="heal-btn" class="btn secondary">
+                <i class="fas fa-heart-pulse"></i> Restore Armor
+            </button>
             <button id="reset-btn" class="btn danger">
-                <i class="fas fa-sync-alt"></i> Reset Combat Logs
+                <i class="fas fa-trash-alt"></i> Wipe AI Memory & Scores
             </button>
         </div>
     </main>
