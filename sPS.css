@@ -1,15 +1,16 @@
 /* ==========================================================================
-   STONE PAPER SCISSOR // BATCOMPUTER TACTICAL EDITION (COMPLETE CSS)
+   STONE PAPER SCISSOR // MARKOV AI & BOSS HP EDITION (COMPLETE CSS)
    ========================================================================== */
 :root {
     --bg-base: #060609;
-    --bg-panel: rgba(18, 18, 26, 0.9);
+    --bg-panel: rgba(18, 18, 26, 0.92);
     --crimson: #ff0a16;
     --crimson-glow: rgba(255, 10, 22, 0.45);
     --amber: #ff9900;
     --amber-glow: rgba(255, 153, 0, 0.45);
     --emerald: #00ff88;
     --emerald-glow: rgba(0, 255, 136, 0.4);
+    --cyan: #00e5ff;
     --text-main: #f5f5f7;
     --text-muted: #8a8d9b;
     --font-poster: 'Anton', Impact, sans-serif;
@@ -34,14 +35,13 @@ body {
     text-align: center;
     overflow-x: hidden;
     background-image: 
-        radial-gradient(circle at 50% 12%, rgba(255, 10, 22, 0.15), transparent 60%),
+        radial-gradient(circle at 50% 10%, rgba(255, 10, 22, 0.15), transparent 60%),
         linear-gradient(rgba(255, 10, 22, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 10, 22, 0.04) 1px, transparent 1px);
     background-size: 100% 100%, 40px 40px, 40px 40px;
-    padding: 20px;
+    padding: 16px;
 }
 
-/* Subtle CRT Scanline Overlay */
 .scanlines {
     position: fixed;
     inset: 0;
@@ -59,7 +59,7 @@ body {
 
 .sim-wrapper {
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     z-index: 2;
 }
 
@@ -68,15 +68,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     padding: 0 4px;
 }
 
 .sys-tag {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--amber);
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .sound-btn {
@@ -84,7 +84,7 @@ body {
     border: 1px solid rgba(255, 153, 0, 0.45);
     color: var(--amber);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     padding: 4px 10px;
     cursor: pointer;
     display: inline-flex;
@@ -95,85 +95,120 @@ body {
     clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
 }
 
-.sound-btn:hover {
-    background: var(--amber);
-    color: #000;
-    box-shadow: 0 0 12px var(--amber-glow);
-}
-
+.sound-btn:hover { background: var(--amber); color: #000; }
 .sound-btn.muted {
     background: rgba(255, 10, 22, 0.1);
     border-color: rgba(255, 10, 22, 0.4);
     color: var(--crimson);
 }
 
-.sound-btn.muted:hover {
+h1 {
+    font-family: var(--font-poster);
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    letter-spacing: 4px;
+    color: #ffffff;
+    text-shadow: 3px 3px 0px #7a0006, 0 0 25px var(--crimson-glow);
+    line-height: 1.05;
+    margin-bottom: 10px;
+}
+
+/* Config Matrix */
+.config-matrix {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.mode-selector {
+    display: inline-flex;
+    background: #0d0d14;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 3px;
+    gap: 4px;
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover { color: #fff; }
+.mode-btn.active {
     background: var(--crimson);
     color: #fff;
     box-shadow: 0 0 12px var(--crimson-glow);
 }
 
-h1 {
-    font-family: var(--font-poster);
-    font-size: clamp(2.1rem, 5.5vw, 3.2rem);
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 3px 3px 0px #7a0006, 0 0 25px var(--crimson-glow);
-    line-height: 1.1;
-    margin-bottom: 6px;
-}
-
-.sub-directive {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    letter-spacing: 2px;
-    margin-bottom: 18px;
-}
-
-/* Scoreboard & Telemetry HUD */
+/* Scoreboard & Armor HP Bars */
 .score-board {
     display: grid;
-    grid-template-columns: 1fr 1.1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1.05fr 1fr;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .score-card {
     background: var(--bg-panel);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 12px 10px;
+    padding: 10px 12px;
     transition: all 0.25s ease;
     clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 
-.player-card {
-    border-top: 3px solid var(--amber);
-}
-
-.ai-card {
-    border-top: 3px solid var(--crimson);
-}
-
-.score-card.pulse-win {
-    transform: translateY(-4px);
-    box-shadow: 0 0 22px var(--emerald-glow);
-    border-color: var(--emerald);
+.card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .score-label {
-    display: block;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     color: var(--text-muted);
-    letter-spacing: 1px;
-    margin-bottom: 2px;
+}
+
+.hp-text {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--emerald);
+}
+
+.hp-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    margin-bottom: 6px;
+    overflow: hidden;
+}
+
+.hp-fill {
+    height: 100%;
+    transition: width 0.3s ease-out;
+}
+
+.user-hp { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.ai-hp { background: var(--crimson); box-shadow: 0 0 8px var(--crimson); }
+
+.score-card.pulse-win {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px var(--emerald-glow);
+    border-color: var(--emerald);
 }
 
 .score-num {
     font-family: var(--font-poster);
-    font-size: 2.2rem;
+    font-size: 1.85rem;
     line-height: 1;
 }
 
@@ -184,145 +219,189 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .streak-box {
     background: rgba(255, 153, 0, 0.1);
     border: 1px solid rgba(255, 153, 0, 0.4);
-    padding: 5px 14px;
+    padding: 4px 10px;
     width: 100%;
 }
 
 .telemetry-label {
     display: block;
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     color: var(--text-muted);
-    letter-spacing: 1.5px;
 }
 
 .streak-num {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: bold;
     color: var(--amber);
 }
 
 .draws-readout {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    letter-spacing: 1px;
 }
 
-/* Head-to-Head Clash Arena */
+/* Live Markov Chain Telemetry Bar */
+.markov-telemetry {
+    background: rgba(12, 12, 18, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 12px;
+    margin-bottom: 12px;
+}
+
+.markov-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+#ai-readout-tag {
+    color: var(--amber);
+}
+
+.prob-bar {
+    display: flex;
+    width: 100%;
+    height: 18px;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    line-height: 18px;
+    color: #000;
+    font-weight: bold;
+}
+
+.prob-seg {
+    transition: width 0.35s ease;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.seg-rock { background: var(--amber); }
+.seg-paper { background: var(--emerald); }
+.seg-scissors { background: var(--crimson); color: #fff; }
+.seg-batarang { background: var(--cyan); }
+.seg-emp { background: #b366ff; color: #fff; }
+
+/* Clash Arena */
 .clash-arena {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 14px;
+    gap: 12px;
     align-items: center;
     background: rgba(12, 12, 18, 0.85);
     border: 1px solid rgba(255, 10, 22, 0.28);
-    padding: 16px;
-    margin-bottom: 22px;
-    box-shadow: inset 0 0 25px rgba(255, 10, 22, 0.06);
+    padding: 12px 16px;
+    margin-bottom: 14px;
 }
 
 .fighter-slot {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .slot-tag {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.64rem;
     color: var(--text-muted);
-    letter-spacing: 1.5px;
 }
 
 .slot-icon {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: #14141f;
     border: 2px solid rgba(255, 255, 255, 0.15);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     color: var(--text-muted);
     transition: all 0.25s ease;
 }
 
 .slot-name {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     color: var(--text-main);
-    letter-spacing: 1.5px;
 }
 
-.vs-divider span {
+.dmg-badge {
     font-family: var(--font-poster);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: var(--crimson);
     letter-spacing: 2px;
-    text-shadow: 0 0 12px var(--crimson-glow);
+    padding: 3px 10px;
+    border: 1px solid rgba(255, 10, 22, 0.3);
 }
 
-/* Weapon Choices */
+/* Weapon Choices Grid */
 .choices {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 22px;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.choices.five-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
 }
 
 .choice {
     background: var(--bg-panel);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 18px 12px 14px;
+    padding: 14px 8px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
-    position: relative;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    transition: all 0.22s ease;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
 .choice:hover {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
     border-color: var(--crimson);
     background: #191116;
-    box-shadow: 0 10px 25px rgba(255, 10, 22, 0.28);
+    box-shadow: 0 8px 20px rgba(255, 10, 22, 0.28);
 }
 
 .choice.selected-choice {
     border-color: var(--amber);
-    box-shadow: 0 0 22px var(--amber-glow);
+    box-shadow: 0 0 18px var(--amber-glow);
 }
 
 .choice-frame {
-    width: 105px;
-    height: 105px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     border: 2px solid rgba(255, 10, 22, 0.45);
-    padding: 5px;
+    padding: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #0b0b10;
     overflow: hidden;
-    transition: all 0.25s ease;
 }
 
-.choice:hover .choice-frame {
-    border-color: var(--amber);
-    box-shadow: 0 0 18px var(--amber-glow);
+.choices.five-grid .choice-frame {
+    width: 64px;
+    height: 64px;
 }
 
 .choice-frame img {
@@ -337,108 +416,161 @@ h1 {
     height: 100%;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--crimson);
 }
 
 .weapon-name {
     font-family: var(--font-poster);
-    font-size: 1.25rem;
-    letter-spacing: 2px;
+    font-size: 1.05rem;
+    letter-spacing: 1.5px;
     color: var(--text-main);
 }
 
 .key-hint {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
 }
 
-/* Result Message Banner */
-.msg-container {
-    margin-bottom: 20px;
-}
+/* Status Banner */
+.msg-container { margin-bottom: 12px; }
 
 #msg {
     font-family: var(--font-mono);
-    font-size: clamp(0.88rem, 2.5vw, 1.05rem);
-    letter-spacing: 1.5px;
-    padding: 14px 20px;
+    font-size: 0.88rem;
+    letter-spacing: 1.2px;
+    padding: 11px 16px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: #101018;
     color: var(--text-main);
-    display: block;
-    width: 100%;
     text-transform: uppercase;
-    transition: all 0.25s ease;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
 #msg.status-win {
     background: rgba(0, 255, 136, 0.12);
     border-color: var(--emerald);
     color: var(--emerald);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
 }
 
 #msg.status-lose {
     background: rgba(255, 10, 22, 0.14);
     border-color: var(--crimson);
     color: #ff4d55;
-    box-shadow: 0 0 20px rgba(255, 10, 22, 0.25);
 }
 
 #msg.status-draw {
     background: rgba(255, 153, 0, 0.14);
     border-color: var(--amber);
     color: var(--amber);
-    box-shadow: 0 0 20px rgba(255, 153, 0, 0.2);
 }
 
-/* Bottom Controls */
+/* Combat Telemetry Log */
+.combat-log-box {
+    background: #09090f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 14px;
+    text-align: left;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+}
+
+.log-header {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--amber);
+    margin-bottom: 6px;
+    letter-spacing: 1.5px;
+}
+
+.combat-log-list {
+    list-style: none;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    max-height: 76px;
+    overflow-y: auto;
+}
+
+.combat-log-list li {
+    padding: 2px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+/* Controls & Modal */
 .controls {
     display: flex;
     justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.7rem 1.25rem;
     font-family: var(--font-mono);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.25s ease;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.22s ease;
+    clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
 }
 
-.btn.danger {
-    background: rgba(255, 10, 22, 0.1);
-    color: var(--crimson);
-    border: 1px solid rgba(255, 10, 22, 0.4);
+.btn.primary { background: var(--crimson); color: #fff; border-color: var(--crimson); }
+.btn.secondary { background: #14141d; color: var(--text-main); }
+.btn.secondary:hover { border-color: var(--amber); color: var(--amber); }
+.btn.danger { background: rgba(255, 10, 22, 0.1); color: var(--crimson); border-color: rgba(255, 10, 22, 0.4); }
+.btn.danger:hover { background: var(--crimson); color: #fff; }
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 4, 7, 0.88);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
 }
 
-.btn.danger:hover {
-    background: var(--crimson);
-    color: #fff;
-    box-shadow: 0 0 20px var(--crimson-glow);
-    transform: translateY(-2px);
+.modal-card {
+    background: #0d0d14;
+    border: 1px solid var(--crimson);
+    border-top: 4px solid var(--crimson);
+    padding: 34px 28px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
 }
 
-@keyframes popClash {
-    0% { transform: scale(0.65); opacity: 0.4; }
-    100% { transform: scale(1); opacity: 1; }
+.modal-stamp {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--amber);
+    letter-spacing: 2px;
 }
 
-.pop-anim {
-    animation: popClash 0.24s ease-out;
+.modal-card h2 {
+    font-family: var(--font-poster);
+    font-size: 2.3rem;
+    letter-spacing: 3px;
+    margin: 8px 0;
 }
 
-@media (max-width: 500px) {
-    .choices { gap: 10px; }
-    .choice-frame { width: 80px; height: 80px; }
-    .weapon-name { font-size: 1rem; }
+.modal-card p {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+}
+
+.hide { display: none !important; }
+
+@media (max-width: 540px) {
+    .choices.five-grid { grid-template-columns: repeat(3, 1fr); }
+    .choice-frame { width: 68px; height: 68px; }
 }
